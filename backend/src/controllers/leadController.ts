@@ -37,7 +37,7 @@ export class LeadController {
         sortBy: (req.query.sortBy as 'latest' | 'oldest') || 'latest'
       };
 
-      const result = await LeadService.getLeads(filters, req.user!.userId);
+      const result = await LeadService.getLeads(filters, req.user!.userId, req.user!.role);
       res.status(200).json(result);
     } catch (error) {
       next(error);
@@ -50,7 +50,7 @@ export class LeadController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const lead = await LeadService.getSingleLead(req.params.id, req.user!.userId);
+      const lead = await LeadService.getSingleLead(req.params.id, req.user!.userId, req.user!.role);
 
       if (!lead) {
         res.status(404).json({
@@ -81,7 +81,8 @@ export class LeadController {
       const lead = await LeadService.updateLead(
         req.params.id,
         req.body,
-        req.user!.userId
+        req.user!.userId,
+        req.user!.role
       );
 
       if (!lead) {
@@ -110,7 +111,7 @@ export class LeadController {
     next: NextFunction
   ): Promise<void> {
     try {
-      const lead = await LeadService.deleteLead(req.params.id, req.user!.userId);
+      const lead = await LeadService.deleteLead(req.params.id, req.user!.userId, req.user!.role);
 
       if (!lead) {
         res.status(404).json({

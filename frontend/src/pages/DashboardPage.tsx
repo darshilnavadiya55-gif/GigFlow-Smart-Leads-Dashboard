@@ -76,12 +76,14 @@ const DashboardPage: React.FC = () => {
         <div className="flex justify-between items-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800">Leads Management</h1>
           <div className="flex gap-4">
-            <button
-              onClick={() => exportLeadsToCSV(leads)}
-              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition"
-            >
-              Export CSV
-            </button>
+            {user?.role === 'admin' && (
+              <button
+                onClick={() => exportLeadsToCSV(leads)}
+                className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg font-medium transition"
+              >
+                Export CSV
+              </button>
+            )}
             <button
               onClick={() => {
                 setEditingLead(undefined);

@@ -12,14 +12,18 @@ export class LeadService {
 
   static async getLeads(
     filters: FilterParams,
-    userId: string
+    userId: string,
+    role: string
   ): Promise<ApiResponse<ILead[]>> {
     const page = filters.page || 1;
     const limit = filters.limit || 10;
     const skip = (page - 1) * limit;
 
-    // Build query
-    const query: any = { createdBy: userId };
+    // Build query - Admin sees ALL leads, sales_user sees only their own
+    const query: any = {};
+    if (role !== 'admin') {
+      query.createdBy = userId;
+    }
 
     if (filters.status) {
       query.status = filters.status;
@@ -64,23 +68,39 @@ export class LeadService {
     };
   }
 
-  static async getSingleLead(leadId: string, userId: string): Promise<ILead | null> {
-    return (await Lead.findOne({ _id: leadId, createdBy: userId })) as unknown as ILead | null;
+  static async getSingleLead(leadId: string, userId: string, role: string): Promise<ILead | null> {
+    // Admin can view any lead, sales_user can only view their own
+    const query: any = { _id: leadId };
+    if (role !== 'admin') {
+      query.createdBy = userId;
+    }
+    return (await Lead.findOne(query)) as unknown as ILead | null;
   }
 
   static async updateLead(
     leadId: string,
     data: any,
-    userId: string
+    userId: string,
+    role: string
   ): Promise<ILead | null> {
+    // Admin can update any lead, sales_user can only update their own
+    const query: any = { _id: leadId };
+    if (role !== 'admin') {
+      query.createdBy = userId;
+    }
     return (await Lead.findOneAndUpdate(
-      { _id: leadId, createdBy: userId },
+      query,
       data,
       { new: true, runValidators: true }
     )) as unknown as ILead | null;
   }
 
-  static async deleteLead(leadId: string, userId: string): Promise<ILead | null> {
-    return (await Lead.findOneAndDelete({ _id: leadId, createdBy: userId })) as unknown as ILead | null;
+  static async deleteLead(leadId: string, userId: string, role: string): Promise<ILead | null> {
+    // Only admin can delete (enforced by route middleware), but still scope query
+    const query: any = { _id: leadId };
+    if (role !== 'admin') {
+      query.createdBy = userId;
+    }
+    return (await Lead.findOneAndDelete(query)) as unknown as ILead | null;
   }
 }

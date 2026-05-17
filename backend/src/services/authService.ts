@@ -17,11 +17,14 @@ export class AuthService {
       };
     }
 
+    // Determine role
+    const assignedRole = email.startsWith('admin') ? 'admin' : 'sales_user';
+
     // Create new user
     const user = new User({
       email,
       password,
-      role: 'sales_user'
+      role: assignedRole
     });
 
     await user.save();

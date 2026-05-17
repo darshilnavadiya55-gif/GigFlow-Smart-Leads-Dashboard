@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuth } from '../../hooks/useAuth';
 import { useTheme } from '../../context/ThemeContext';
+import AppLogo from '../Common/AppLogo';
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -71,9 +72,7 @@ const Login: React.FC = () => {
           : 'glass-card-light hover:shadow-lg'
       }`}>
         <div className="text-center mb-8">
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-xl bg-gradient-to-tr from-blue-600 to-purple-600 mb-6 shadow-lg shadow-blue-500/30">
-            <svg className="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M13 10V3L4 14h7v7l9-11h-7z"></path></svg>
-          </div>
+          <AppLogo size="md" className="mb-6 shadow-lg shadow-blue-500/30" />
           <h2 className={`text-3xl font-bold tracking-tight ${dark ? 'text-white' : 'text-gray-900'}`}>Welcome Back</h2>
           <p className={`mt-2 font-light ${dark ? 'text-slate-400' : 'text-gray-500'}`}>Sign in to your Smart Leads dashboard</p>
         </div>

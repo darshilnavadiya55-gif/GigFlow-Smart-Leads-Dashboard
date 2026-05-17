@@ -4,6 +4,7 @@ import { useTheme } from '../../context/ThemeContext';
 
 interface LeadTableProps {
   leads: Lead[];
+  onView: (lead: Lead) => void;
   onEdit: (lead: Lead) => void;
   onDelete: (id: string) => void;
   isAdmin: boolean;
@@ -12,6 +13,7 @@ interface LeadTableProps {
 
 const LeadTable: React.FC<LeadTableProps> = ({
   leads,
+  onView,
   onEdit,
   onDelete,
   isAdmin,
@@ -106,7 +108,15 @@ const LeadTable: React.FC<LeadTableProps> = ({
               <tr key={lead._id} className={`transition-colors ${
                 dark ? 'hover:bg-slate-700/30' : 'hover:bg-blue-50/50'
               }`}>
-                <td className={`px-6 py-4 whitespace-nowrap text-sm font-medium ${dark ? 'text-white' : 'text-gray-900'}`}>{lead.name}</td>
+                <td className={`px-6 py-4 whitespace-nowrap text-sm font-medium ${dark ? 'text-white' : 'text-gray-900'}`}>
+                  <button
+                    type="button"
+                    onClick={() => onView(lead)}
+                    className="text-left hover:text-blue-500 transition-colors"
+                  >
+                    {lead.name}
+                  </button>
+                </td>
                 <td className={`px-6 py-4 whitespace-nowrap text-sm ${dark ? 'text-slate-300' : 'text-gray-600'}`}>{lead.email}</td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm">
                   <span className={`inline-flex px-3 py-1 rounded-full text-xs font-medium border ${getStatusStyle(lead.status)}`}>
@@ -123,6 +133,16 @@ const LeadTable: React.FC<LeadTableProps> = ({
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm text-right space-x-3">
                   <button
+                    type="button"
+                    onClick={() => onView(lead)}
+                    className={`font-medium transition-colors ${
+                      dark ? 'text-slate-400 hover:text-slate-200' : 'text-gray-500 hover:text-gray-800'
+                    }`}
+                  >
+                    View
+                  </button>
+                  <button
+                    type="button"
                     onClick={() => onEdit(lead)}
                     className="text-blue-500 hover:text-blue-400 font-medium transition-colors"
                   >
@@ -130,6 +150,7 @@ const LeadTable: React.FC<LeadTableProps> = ({
                   </button>
                   {isAdmin && (
                     <button
+                      type="button"
                       onClick={() => onDelete(lead._id)}
                       className="text-red-500 hover:text-red-400 font-medium transition-colors"
                     >

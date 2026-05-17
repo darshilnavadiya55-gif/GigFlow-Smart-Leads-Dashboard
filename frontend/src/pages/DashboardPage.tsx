@@ -3,6 +3,7 @@ import Navbar from '../components/Common/Navbar';
 import FilterPanel from '../components/Dashboard/FilterPanel';
 import LeadTable from '../components/Dashboard/LeadTable';
 import LeadForm from '../components/Dashboard/LeadForm';
+import LeadModal from '../components/Modals/LeadModal';
 import { useLeads } from '../hooks/useLeads';
 import { useAuth } from '../hooks/useAuth';
 import { useTheme } from '../context/ThemeContext';
@@ -35,6 +36,7 @@ const DashboardPage: React.FC = () => {
   
   const [showForm, setShowForm] = useState(false);
   const [editingLead, setEditingLead] = useState<Lead | undefined>(undefined);
+  const [viewingLeadId, setViewingLeadId] = useState<string | null>(null);
   const [isExporting, setIsExporting] = useState(false);
 
   useEffect(() => {
@@ -55,6 +57,10 @@ const DashboardPage: React.FC = () => {
     setEditingLead(undefined);
     // Refetch to maintain order and pagination
     fetchLeads({ ...filters, search: debouncedSearch });
+  };
+
+  const handleView = (lead: Lead) => {
+    setViewingLeadId(lead._id);
   };
 
   const handleEdit = (lead: Lead) => {
@@ -177,6 +183,7 @@ const DashboardPage: React.FC = () => {
 
             <LeadTable
               leads={leads}
+              onView={handleView}
               onEdit={handleEdit}
               onDelete={handleDelete}
               isAdmin={user?.role === 'admin'}
@@ -222,6 +229,15 @@ const DashboardPage: React.FC = () => {
           </div>
         )}
       </main>
+
+      <LeadModal
+        leadId={viewingLeadId}
+        isOpen={!!viewingLeadId}
+        onClose={() => setViewingLeadId(null)}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+        isAdmin={user?.role === 'admin'}
+      />
     </div>
   );
 };

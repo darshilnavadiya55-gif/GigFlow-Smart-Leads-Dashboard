@@ -72,10 +72,13 @@ class ApiService {
     return response.data;
   }
 
-  async getSingleLead(id: string): Promise<{ data: Lead }> {
-    const response = await this.axiosInstance.get<{ data: Lead }>(
-      `/leads/${id}`
-    );
+  async getSingleLead(id: string) {
+    const response = await this.axiosInstance.get<{
+      success: boolean;
+      statusCode: number;
+      message: string;
+      data: Lead;
+    }>(`/leads/${id}`);
     return response.data;
   }
 

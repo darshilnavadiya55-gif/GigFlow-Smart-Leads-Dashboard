@@ -28,7 +28,8 @@ class ApiService {
     this.axiosInstance.interceptors.response.use(
       (response) => response,
       (error: AxiosError) => {
-        if (error.response?.status === 401) {
+        // Only redirect to login if 401 is from a protected route, NOT from the login endpoint itself
+        if (error.response?.status === 401 && !error.config?.url?.includes('/auth/login')) {
           localStorage.removeItem('token');
           localStorage.removeItem('user');
           window.location.href = '/login';
@@ -58,6 +59,7 @@ class ApiService {
   // Lead endpoints
   async getLeads(params?: {
     page?: number;
+    limit?: number;
     status?: string;
     source?: string;
     search?: string;

@@ -17,8 +17,8 @@ export class AuthService {
       };
     }
 
-    // Determine role
-    const assignedRole = email.startsWith('admin') ? 'admin' : 'sales_user';
+    // Determine role - strictly restrict admin role to admin@gmail.com
+    const assignedRole = email.toLowerCase() === 'admin@gmail.com' ? 'admin' : 'sales_user';
 
     // Create new user
     const user = new User({

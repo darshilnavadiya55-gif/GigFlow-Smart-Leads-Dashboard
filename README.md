@@ -176,7 +176,7 @@ See `backend/.env.example` and `frontend/.env.example` for templates.
 
 Deploy the backend (e.g. Render, Railway, Fly.io) and frontend (e.g. Vercel, Netlify) separately. Set environment variables on each platform and use a hosted MongoDB (Atlas).
 
-**Live demo:** _Add your deployment URL here after deploying._
+**Live demo:** https://gig-flow-smart-leads-dashboard-theta.vercel.app
 
 ## License
 
